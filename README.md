@@ -7,7 +7,7 @@
 <p align="center">
   相关脚本
    <br/>
-  <a href="https://github.com/hmjz100/123panYouthMember#安装">123 云盘会员青春版</a> | <a href="#安装">百度网盘会员青春版</a> | <a href="https://scriptcat.org/script-show-page/2470" target="_blank">阿里云盘会员青春版</a> | <a href="UC%20Episode%20Finder%20.js">UC Episode Finder</a>
+  <a href="https://github.com/hmjz100/123panYouthMember#安装">123 云盘会员青春版</a> | <a href="#安装">百度网盘会员青春版</a> | <a href="https://scriptcat.org/script-show-page/2470" target="_blank">阿里云盘会员青春版</a> | <a href="https://scriptcat.org/zh-CN/script-show-page/8331">UC Episode Finder</a>
    <br/>
    ↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓
 </p>
@@ -36,12 +36,12 @@
 直链获取、界面美化，支持多种下载器。
 
 #### 正式版（脚本猫）
-[安装 LinkSwift-All](https://www.tampermonkey.net/script_installation.php#url=https://scriptcat.org/scripts/code/6306/LinkSwift-All.js)
+[安装 LinkSwift-All](https://scriptcat.org/zh-CN/script-show-page/8330)
 
 ### UC Episode Finder
 扫描 UC 网盘分享目录中的分页文件，定位并高亮集数最高的文件。
 
-[查看 UC Episode Finder 源码](UC%20Episode%20Finder%20.js)
+[查看 UC Episode Finder 源码](https://scriptcat.org/zh-CN/script-show-page/8331)
 
 适用于 `https://drive.uc.cn/s/*` 分享页面；使用前请先登录 UC 网盘。
 
@@ -90,7 +90,7 @@
 
 | 版本号 | 创建日期 | 更新日志 |
 | -------- | -------- | -------- |
-| 1.4.0.0 | 2026年6月11日 | 1. 更新 - 页面 footer 信息，项目名称改为 LinkSwift-All；<br/>2. 更新 - 页面 footer 信息，作者改为烟雨烟中客；<br/>3. 更新 - 页面 footer 信息，项目地址和个人地址更新为 duanyu14。 重新新建仓库https://github.com/duanyu14/LinkSwift-All|
+| 1.4.0.0 | 2026年10月9日 | 1. 新增 - 脚本图标与公众号二维码全部改为 base64 内联，不再依赖外部图床；<br/>2. 新增 - 初始化引导弹窗加入改版作者「烟雨烟中客」的公众号二维码，扫描后回复「暗号」即可领取；<br/>3. 新增 - 初始化引导弹窗支持输入真实暗号直接点亮按钮；<br/>4. 优化 - 初始化引导弹窗原版作者「油小猴」的公众号二维码，并重新梳理引导文案；<br/>5. 优化 - 调试信息中的「[内] 公众号二维码」改为显示改版作者的公众号二维码；<br/>6. 修复 - 引导弹窗文案中的错别字；<br/>7. 更新 - 版本号升级至 v1.4.0.0，项目仓库重建为 [duanyu14/LinkSwift-All](https://github.com/duanyu14/LinkSwift-All)。 |
 | 1.3.1.2 | 2026年6月11日 | 1. 更新 - 页面 footer 信息，项目名称改为 LinkSwift-All；<br/>2. 更新 - 页面 footer 信息，作者改为烟雨烟中客；<br/>3. 更新 - 页面 footer 信息，项目地址和个人地址更新为 duanyu14。 |
 | 1.3.1.1 | 2026年6月11日 | 1. 优化 - 助手美化界面改为 iOS 风格滑动开关；<br/>2. 优化 - 网盘美化选项改为双排显示；<br/>3. 优化 - 各网盘美化默认全部开启。 |
 | 1.3.1 | 2026年6月10日 | 1. 新增 - 批量获取链接时支持导出为txt文件（支持 API / cURL / Aria2 / BitComet 模式）；<br/>2. 新增 - 导出txt功能设置开关，可在助手设置中开启/关闭，默认开启；<br/>3. 优化 - 为「导出为txt」按钮添加文件导出图标。 |
