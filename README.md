@@ -26,7 +26,7 @@
 本仓库包含三个用户脚本：
 
 - **LinkSwift-All**：基于 Hmjz100 和油小猴的 LinkSwift 修改，支持百度网盘、阿里云盘、中国移动云盘、天翼云盘、迅雷云盘、光鸭云盘、夸克网盘、UC 网盘和 123 云盘，提供直链获取、界面美化及多种下载器推送功能。
-- **LinkSwift-All 免暗号版**：基于 v1.4.0.0 的独立分支版本，跳过初始化暗号门禁，安装后按钮直接点亮可用；功能与正式版一致，后续更新节奏可能滞后于正式版。
+- **LinkSwift-All 免暗号版**：功能同 LinkSwift-All，跳过初始化引导弹窗，安装即用；与 LinkSwift-All 为独立脚本，可共存。**不发布到脚本猫，仅通过 GitHub raw 安装**。
 - **UC Episode Finder**：用于 UC 网盘分享页，扫描分页文件列表，按文件名识别剧集编号，并结合文件时间确定最大集数，最后定位并高亮对应文件。它是独立脚本，不依赖 LinkSwift-All。
 
 ## 安装
@@ -42,6 +42,8 @@
 #### 免暗号版
 跳过初始化暗号门禁，安装即可使用（v1.4.0.0 基线）。
 [安装 LinkSwift-All 免暗号版](https://github.com/duanyu14/LinkSwift-All/raw/master/LinkSwift-All.no-init.js)
+
+> 本脚本**不发布到脚本猫**，仅通过 GitHub raw 链接安装。安装后脚本管理器会按 raw 文件的 `@version` 自动检查更新。
 
 ### UC Episode Finder
 扫描 UC 网盘分享目录中的分页文件，定位并高亮集数最高的文件。
