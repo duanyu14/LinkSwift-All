@@ -65,6 +65,7 @@
 // @match             *://*.123912.com/*
 // @connect           *
 // @connect           localhost
+// @connect           127.0.0.1
 // @connect           baidu.com
 // @connect           baidupcs.com
 // @connect           aliyundrive.com
@@ -3075,6 +3076,7 @@
 				let filename = getFileName(v);
 				let size = getFileSize(v);
 				let dlink = getFileLink(v);
+				let playButton = `<button class="pl-item-link pl-btn-primary pl-btn-success listener-play listener-tip" data-link="${dlink}" data-name="${filename}" data-size="${size}" data-title="使用本地播放代理播放文件">▶ 播放</button>`;
 				let mirror = base.isType(getFileMirror) !== "undefined" ? getFileMirror(getFileLink(v)) : undefined;
 				if (!dlink || !dlink.includes("http")) {
 					content.find(".pl-main").append(`<div class="pl-item">
@@ -3086,6 +3088,7 @@
 						allLink.push(dlink);
 						content.find(".pl-main").append(`<div class="pl-item" data-index="${i}" data-link="${dlink}" data-name="${filename}" data-size="${size}">
 							<div class="pl-item-name listener-tip"><div class="name">${filename}</div><div class="size">${base.sizeFormat(size)}</div></div>
+							${playButton}
 							<button class="pl-item-link pl-btn-primary pl-btn-default listener-api-download enhance listener-tip" data-title="通过脚本跨域请求下载文件，已支持多线程、智能多分片，显示预估剩余时间、下载速度；<br/>具体线程取决于浏览器的限制，所以非<b>必要情况（例如系统环境无法安装程序）</b>下，不建议使用此功能!"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-downward"/></svg>增强下载 (Beta)</button>
 							<button class="pl-item-link pl-btn-primary pl-btn-info listener-api-download normal listener-tip" data-link="${dlink}" data-filename="${filename}" data-title="通过浏览器访问链接下载文件，适用于支持 iframe 的浏览器<br/>点击后需等待浏览器弹出提示才可点击下个下载，否则只会下载后者"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-downward"/></svg>直接下载</button>
 							<button class="pl-btn-primary pl-btn-default listener-idm-download listener-tip" data-filename="${filename}" data-filesize="${size}" data-link="${dlink}" data-title="通过 IDM 扩展的捕获协议，将链接推送至 IDM，理论上仅适用于版本较新的 IDM。"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-cloud-arrow-up"/></svg><span>推送至 IDM (Beta)</span></button>
@@ -3106,6 +3109,7 @@
 						allLink.push(finalink);
 						content.find(".pl-main").append(`<div class="pl-item">
 							<div class="pl-item-name listener-tip" data-size="${size}"><div class="name">${filename}</div><div class="size">${base.sizeFormat(size)}</div></div>
+							${playButton}
 							<a class="pl-item-link listener-copy listener-tip" data-copy='${finalink}' data-title="点击复制 curl 命令行">${finalink}<br/><svg class="pl-icon"><use xlink:href="#pl-icon-fa-copy"/></svg>复制 ${filename} 下载命令行</a>
 						</div>`);
 					}
@@ -3114,6 +3118,7 @@
 						allLink.push(finalink);
 						content.find(".pl-main").append(`<div class="pl-item">
 							<div class="pl-item-name listener-tip" data-size="${size}"><div class="name">${filename}</div><div class="size">${base.sizeFormat(size)}</div></div>
+							${playButton}
 							<button class="pl-item-link pl-btn-primary pl-btn-default listener-aria2-download" data-filename="${filename}" data-link="${dlink}"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-cloud-arrow-up"/></svg><span>推送链接到 Aria2 下载器</span></button>
 							<button class="pl-btn-primary pl-btn-info listener-copy listener-tip" data-copy='${finalink}' data-title="Aria2 没启用 RPC？点击复制 aria2c 命令行手动下载"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-copy"/></svg>复制下载命令行</button>
 						</div>`);
@@ -3123,6 +3128,7 @@
 						allLink.push(finalink);
 						content.find(".pl-main").append(`<div class="pl-item">
 							<div class="pl-item-name listener-tip" data-size="${size}"><div class="name">${filename}</div><div class="size">${base.sizeFormat(size)}</div></div>
+							${playButton}
 							<a class="pl-item-link pl-btn-primary pl-btn-default listener-tip" href="${finalink}" data-title="点击打开 BC 链接以手动调起比特彗星下载，右键可复制 BC 链接"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-downward"/></svg>使用 BC 链接下载</a>
 							${mirror ? `<button class="pl-btn-primary pl-btn-success listener-copy listener-tip" data-copy='${mirror}' data-title="点击复制镜像地址"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-copy"/></svg>复制镜像</a>` : ""}
 							<button class="pl-btn-primary pl-btn-info listener-bitcomet-download listener-tip" data-filename="${filename}" data-link="${dlink}" data-title="除非 BC 链接无法调起比特彗星，否则不建议使用此方式<br/><br/>由于比特彗星内置的远程下载 Web API 服务代码存在缺陷，请求可能会随机出现“发送失败 - 服务器返回空请求”错误，实际上客户端已成功开始下载<br/>由于脚本无法准确判断请求是否真正成功，即使出现错误，也会提示“成功”"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-cloud-arrow-up"/></svg><span>推送至下载器</span></button>
@@ -3131,6 +3137,7 @@
 					if (temp.mode === "abdm") {
 						content.find(".pl-main").append(`<div class="pl-item">
 							<div class="pl-item-name listener-tip" data-size="${size}"><div class="name">${filename}</div><div class="size">${base.sizeFormat(size)}</div></div>
+							${playButton}
 							<button class="pl-item-link pl-btn-primary pl-btn-default listener-abdm-download slient" data-filename="${filename}" data-link="${dlink}"><svg class="pl-icon"><use xlink:href="#pl-icon-fa-cloud-arrow-up"/></svg><span>推送链接到 ABDM 下载器</span></button>
 						</div>`);
 					}
@@ -3338,6 +3345,75 @@
 				let dataset = e.currentTarget.dataset;
 				let link = new URL(dataset.link);
 				$("#downloadIframe").attr("src", link.href);
+			});
+			$doc.on("click", ".listener-play", async function (e) {
+				e.preventDefault();
+				let target = $(e.currentTarget);
+				let url = target.data("link");
+				let filename = target.data("name");
+				let headers = {};
+				let host = location.host.toLowerCase();
+				if (host.includes("uc.cn")) {
+					headers["User-Agent"] = config.$uc.api.ua.downloadLink;
+					headers.Referer = `https://${location.host}/`;
+					headers.Cookie = document.cookie;
+				} else if (host.includes("quark.cn")) {
+					headers["User-Agent"] = config.$quark.api.ua.downloadLink;
+					headers.Referer = `https://${location.host}/`;
+					headers.Cookie = document.cookie;
+				} else if (host.includes("alipan.com") || host.includes("aliyundrive.com")) {
+					headers.Referer = `https://${location.host}/`;
+				} else if (host.includes("baidu.com")) {
+					headers["User-Agent"] = config.$baidu.api.ua.downloadLink;
+				}
+				try {
+					if (!url) throw new Error("下载链接为空");
+					let request = typeof GM_xmlhttpRequest === "function" ? GM_xmlhttpRequest : (typeof GM !== "undefined" && typeof GM.xmlHttpRequest === "function" ? GM.xmlHttpRequest.bind(GM) : null);
+					if (!request) throw new Error("当前脚本管理器不支持跨域请求");
+					// 两段式第一步：GET /health 预探测，代理未启动时给出明确提示而不是笼统连接错误
+					await new Promise((resolve, reject) => {
+						request({
+							method: "GET",
+							url: "http://127.0.0.1:7789/health",
+							timeout: 3000,
+							onload: res => (res.status >= 200 && res.status < 300) ? resolve() : reject(new Error(`本地代理响应异常 HTTP ${res.status}`)),
+							onerror: () => reject(new Error("本地代理未启动，请先运行 node stream-proxy.js")),
+							ontimeout: () => reject(new Error("本地代理未响应，请先运行 node stream-proxy.js"))
+						});
+					});
+					// 这里改为请求 7789 端口
+					let response = await new Promise((resolve, reject) => {
+						request({
+							method: "POST",
+							url: "http://127.0.0.1:7789/play",
+							headers: { "Content-Type": "application/json" },
+							data: JSON.stringify({ url, headers, filename }),
+							timeout: 15000,
+							onload: resolve,
+							onerror: () => reject(new Error("无法连接多线程代理")),
+							ontimeout: () => reject(new Error("连接代理超时"))
+						});
+					});
+					if (response.status < 200 || response.status >= 300) throw new Error(`代理返回 HTTP ${response.status}`);
+					// 代理返回 JSON：播放器缺失时 ok=false, reason=player_missing，改用网页播放
+					let playResult = null;
+					try { playResult = JSON.parse(response.responseText); } catch (e) { }
+					if (playResult && playResult.ok === false && playResult.reason === "player_missing") {
+						// 异步回调里直接 window.open 会被弹窗拦截，改为确认框，由用户手势触发打开
+						Swal.fire({
+							icon: "warning",
+							title: "本地播放器未找到",
+							text: "PotPlayer 路径配置不正确或不存在，是否改用网页播放？",
+							showCancelButton: true,
+							confirmButtonText: "网页播放",
+							cancelButtonText: "取消"
+						}).then(r => { if (r.isConfirmed && playResult.playUrl) window.open(playResult.playUrl, "_blank"); });
+						return;
+					}
+					message.success("已调用多线程代理，PotPlayer 正在启动！");
+				} catch (err) {
+					message.error(`播放失败：${err?.message || "代理请求失败"}`);
+				}
 			});
 			$doc.on("click", ".pl-item-downing .stop", async function (e) {
 				var status = base._EventFactory(e);
@@ -8281,6 +8357,12 @@ a.downloadSubtitle:disabled, button.downloadSubtitle:disabled{background-color:$
 			else if (/pan.quark.cn/.test(location.host)) currentPan = "$quark";
 			else if (/drive.uc.cn/.test(location.host)) currentPan = "$uc";
 			else if (/(www|login).(123(pan|684|865|952|912).com|123pan.cn)/.test(location.host)) currentPan = "$123pan";
+			// 当前仅启用 UC 网盘和夸克网盘；如需恢复其他网盘，扩充此数组即可
+			const SUPPORTED_PANS = ["$uc", "$quark"];
+			if (!currentPan || !SUPPORTED_PANS.includes(currentPan)) {
+				base.console.warn(`[LinkSwift] 当前仅支持 UC / 夸克，已跳过注入：${location.host}`);
+				return;
+			}
 			if (currentPan && base.getValue("setting_enabled_pan")[currentPan] === false) return;
 			if ("initPanLinker" in temp.main) temp.main.initPanLinker();
 			// 运行绿化程序

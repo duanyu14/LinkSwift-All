@@ -1,3 +1,9 @@
+> [!WARNING]
+> 当前浏览的是 **dev 开发分支**，内容尚未发布、随时可能变动，**不要**从本分支安装脚本日常使用。
+> 日常使用请前往 [master 分支](https://github.com/duanyu14/LinkSwift-All/tree/master)，那里始终是最新正式版。
+>
+> dev 与 master 自 `02e2797`（v1.4.0.0）起分叉：dev 承载本地播放代理合并、播放流程改造、UC/夸克功能收缩等开发中改动；master 仅维护正式脚本与免暗号版。两者不保证同步。
+
 > [!IMPORTANT]
 > 如果您是从 GreasyFork 找到本项目，建议前往下方的[安装](#安装)使用官方发布源覆盖安装，以便及时获取更新。
 
@@ -23,10 +29,25 @@
 
 ## 项目简介
 
-本仓库包含两个用户脚本：
+本仓库（dev 分支）包含以下内容：
 
-- **LinkSwift-All**：基于 Hmjz100 和油小猴的 LinkSwift 修改，支持百度网盘、阿里云盘、中国移动云盘、天翼云盘、迅雷云盘、光鸭云盘、夸克网盘、UC 网盘和 123 云盘，提供直链获取、界面美化及多种下载器推送功能。
+- **LinkSwift-All.js**（dev 版用户脚本）：基于 Hmjz100 和油小猴的 LinkSwift 修改，提供直链获取、界面美化及多种下载器推送功能。dev 版额外包含本地播放改造（health 预探测 + 播放器缺失两段式弹窗），并将注入范围收缩为仅 UC / 夸克网盘。
+- **stream-proxy.js**（本地播放代理）：合并原 fast-proxy.js 与 linkswift-proxy.js 的单文件 Node 代理服务，零依赖、仅监听 `127.0.0.1:7789`，为 PotPlayer / 浏览器播放器提供多分块并发拉流。
+- **test-stream-proxy.js / test-ffprobe.js**：代理功能回归测试与手动流检查工具。
 - **UC Episode Finder**：用于 UC 网盘分享页，扫描分页文件列表，按文件名识别剧集编号，并结合文件时间确定最大集数，最后定位并高亮对应文件。它是独立脚本，不依赖 LinkSwift-All。
+
+注：**免暗号版（LinkSwift-All.no-init.js）只存在于 master 分支**，且刻意不与 dev 同步——它是 v1.4.0.0 基线的免暗号快照，不含 dev 的 health 预探测、两段式播放弹窗与 SUPPORTED_PANS 收缩。
+
+## 分支 / 版本对比
+
+| 项目 | master（正式版） | dev（开发版，本分支） |
+| ---- | ---- | ---- |
+| LinkSwift-All.js | v1.4.0.0，支持全部 9 家网盘 | 开发中：仅 UC / 夸克注入；播放前 health 预探测；播放器缺失两段式弹窗 |
+| LinkSwift-All.no-init.js | ✅ 有（v1.4.0.0 基线免暗号版） | ❌ 无（刻意不同步，见 master） |
+| stream-proxy.js | ❌ 无 | ✅ 有（合并后的单文件代理） |
+| fast-proxy.js / linkswift-proxy.js | ❌ 已删除 | ❌ 已删除（合并入 stream-proxy.js） |
+| 测试工具 | ❌ 无 | ✅ test-stream-proxy.js（25 项断言）、test-ffprobe.js |
+| 定位 | 随时可发布，日常使用请装此分支 | 开发暂存区，功能验证后再合并回 master |
 
 ## 安装
 
@@ -38,12 +59,67 @@
 #### 正式版（脚本猫）
 [安装 LinkSwift-All](https://scriptcat.org/zh-CN/script-show-page/8330)
 
+#### 免暗号版（master 分支）
+跳过初始化暗号门禁的 v1.4.0.0 基线版本，从 master 分支安装：
+[安装 LinkSwift-All 免暗号版](https://github.com/duanyu14/LinkSwift-All/raw/master/LinkSwift-All.no-init.js)
+
+#### dev 版（本分支，仅供测试）
+体验 dev 改动（仅 UC/夸克注入 + 本地播放改造）需先运行本地代理（见下方「本地播放代理」章节）：
+[安装 LinkSwift-All dev 版](https://github.com/duanyu14/LinkSwift-All/raw/dev/LinkSwift-All.js)
+
 ### UC Episode Finder
 扫描 UC 网盘分享目录中的分页文件，定位并高亮集数最高的文件。
 
 [查看 UC Episode Finder 源码](https://scriptcat.org/zh-CN/script-show-page/8331)
 
 适用于 `https://drive.uc.cn/s/*` 分享页面；使用前请先登录 UC 网盘。
+
+## 本地播放代理（stream-proxy.js）
+
+合并自 fast-proxy.js（多线程分块拉流）与 linkswift-proxy.js（token 注册 + PotPlayer 拉起），单文件、零依赖（仅 Node 标准库），仅监听 `127.0.0.1:7789`，不对外网开放。
+
+### 启动
+
+```bash
+node stream-proxy.js
+# 可选：指定 PotPlayer 路径（默认 D:\Pure Codec\x64\PotPlayerMini64.exe）
+set POTPLAYER=D:\Path\to\PotPlayerMini64.exe && node stream-proxy.js
+```
+
+### 接口一览
+
+| 方法与路径 | 说明 |
+| ---- | ---- |
+| `POST /register` | 注册播放源，body 为 `{url, headers, filename?}`，返回 `{token}`。token 为 `crypto.randomBytes(8)` 十六进制，TTL 10 分钟，命中即续期 |
+| `GET /stream/<token>` | 流式代理：探测上游 Range 支持后按 4MB 分块 × 8 并发拉流、顺序写回；上游不支持 Range 时回退 200 整段透传；上游 3xx 自动跟随（最多 3 跳）；块级 15s 超时 × 3 次重试；客户端中断即刻取消全部在途上游请求 |
+| `POST /play` | 一键播放兼容接口：注册 + 拉起 PotPlayer，返回 JSON `{ok, playUrl}`；播放器缺失时 `{ok:false, reason:'player_missing', playUrl}` |
+| `GET /play?t=<token>` | 浏览器播放页（HTML `<video>`），直链过期会提示重新点击播放按钮 |
+| `GET /launch?t=<token>` | 拉起本地 PotPlayer 播放 `/stream/<token>`，302 回播放页 |
+| `GET /health` | 存活探测，供油猴脚本播放前预检查代理是否运行 |
+
+安全措施：CORS 仅放行本地与脚本 @match 覆盖的网盘域名（baidu / alipan / aliyundrive / quark / uc / xunlei / 123pan 系列 / 139 / 189 等），其余 Origin 返回 403；拒绝 URL 内联账号密码；请求体超 1MB 返回 413；播放页文件名做 HTML 转义防 XSS；HTTPS 证书放宽仅作用于代理自身的 agent，不污染全局。
+
+### dev 版油猴脚本配合方式
+
+1. 点击播放按钮后，脚本先 `GET /health`（3s 超时）预探测代理存活；未启动/无响应时直接报错提示「请先运行 node stream-proxy.js」，不再盲发播放请求。
+2. 随后 `POST /play`；若返回 `reason:'player_missing'`（PotPlayer 路径不存在），弹出 SweetAlert2 提示，用户确认后以第二次用户手势打开浏览器播放页 `playUrl`，规避浏览器弹窗拦截。
+
+## dev 分支改动明细
+
+1. **代理合并**：删除 fast-proxy.js、linkswift-proxy.js，合并为单文件 stream-proxy.js（接口见上表），并修复二者原有问题：token 过期导致拖拽进度条 404（改为命中续期）、探测响应未消费导致 socket 挂死、abort 后在途分块不清理、上游错误 body 透传等。
+2. **播放改造**：LinkSwift-All.js 播放按钮接入 health 预探测 + player_missing 两段式弹窗；元数据 @connect 补充 `127.0.0.1`。
+3. **SUPPORTED_PANS 收缩**：main.init() 注入门禁仅放行 `$uc` / `$quark`，其余网盘页面跳过注入并在控制台告警；其余网盘模块代码全部保留，恢复只需改回白名单。
+4. **开发工具**：新增 test-stream-proxy.js（25 项功能断言，含 2 跳重定向跟随、重定向环 502、abort 取消回归、XSS、413、上游 404→502 等）与 test-ffprobe.js（手动查看 `/stream` 响应头与字节流）。
+
+## 开发文档
+
+环境要求：Node.js ≥ 18（仅标准库，无需 npm install）。
+
+```bash
+node stream-proxy.js          # 启动代理（7789）
+node test-stream-proxy.js     # 功能回归测试（自带假源站，不依赖外网和网盘账号）
+node test-ffprobe.js <token>  # 手动检查某个 token 的流响应头
+```
 
 ## 说明
 
@@ -83,10 +159,19 @@
 
 ## 版本号
 
-正式版：v1.4.0.0 
+正式版：v1.4.0.0（master 分支）  
+dev 分支：基于 v1.4.0.0 的开发版，未定版本号；功能验证通过并合并回 master 后再正式升版。  
 如果您是在其他渠道获取到本脚本的，安装后所带来的问题开发者概不负责。
 
 ## 更新日志
+
+### dev 分支（开发中，未发布）
+
+| 日期 | 改动 |
+| ---- | ---- |
+| 2026年10月17日 | 1. 新增 - stream-proxy.js：合并 fast-proxy / linkswift-proxy 为单文件代理（Range 探测、4MB×8 并发分块、块级 3 次重试、上游 3xx 跟随、abort 即刻取消在途请求、CORS 白名单、token 命中续期）；<br/>2. 新增 - dev 版播放改造：health 预探测 + 播放器缺失两段式弹窗，@connect 补充 127.0.0.1；<br/>3. 新增 - SUPPORTED_PANS 注入门禁，dev 版仅放行 UC / 夸克；<br/>4. 新增 - test-stream-proxy.js（25 项断言）与 test-ffprobe.js；<br/>5. 删除 - fast-proxy.js、linkswift-proxy.js。 |
+
+### 正式版
 
 | 版本号 | 创建日期 | 更新日志 |
 | -------- | -------- | -------- |
