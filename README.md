@@ -43,7 +43,7 @@
 | 项目 | master（正式版） | dev（开发版，本分支） |
 | ---- | ---- | ---- |
 | LinkSwift-All.js | v1.4.0.0，支持全部 9 家网盘 | 开发中：仅 UC / 夸克注入；播放前 health 预探测；播放器缺失两段式弹窗 |
-| LinkSwift-All.no-init.js | ✅ 有（v1.4.0.0 基线免暗号版） | ❌ 无（刻意不同步，见 master） |
+| LinkSwift-All.no-init.js | ✅ 有（v1.4.0.0 基线免暗号版；不发布脚本猫，仅 raw 安装） | ❌ 无（刻意不同步，见 master） |
 | stream-proxy.js | ❌ 无 | ✅ 有（合并后的单文件代理） |
 | fast-proxy.js / linkswift-proxy.js | ❌ 已删除 | ❌ 已删除（合并入 stream-proxy.js） |
 | 测试工具 | ❌ 无 | ✅ test-stream-proxy.js（25 项断言）、test-ffprobe.js |
@@ -60,7 +60,7 @@
 [安装 LinkSwift-All](https://scriptcat.org/zh-CN/script-show-page/8330)
 
 #### 免暗号版（master 分支）
-跳过初始化暗号门禁的 v1.4.0.0 基线版本，从 master 分支安装：
+功能相同，跳过初始化引导直接可用（v1.4.0.0 基线）；**不发布脚本猫，仅通过 GitHub raw 安装**，更新检测依赖 raw 文件的 `@version`。从 master 分支安装：
 [安装 LinkSwift-All 免暗号版](https://github.com/duanyu14/LinkSwift-All/raw/master/LinkSwift-All.no-init.js)
 
 #### dev 版（本分支，仅供测试）
